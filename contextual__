@@ -3,15 +3,16 @@
 __datadir=$HOME/.context
 
 __context='main'
-
 __domain='default'
+
+# tmux integration
+if [[ $TMUX_PANE ]]; then {
+  __context=$(tmux display-message -p '#{pane_id}')
+  __domain=$(basename $(tmux display-message -p "#{socket_path}"))
+} fi
 
 __puton__ () {
   mkdir -p $__datadir/$__domain
-  if [[ $TMUX_PANE ]]; then {
-    __context=$(tmux display-message -p '#{pane_id}')
-    __domain=$(basename $(tmux display-message -p "#{socket_path}"))
-  } fi
 }
 
 __sourced () {
@@ -45,10 +46,14 @@ set__ () {
   printf '\033]2;%s\033\\' "context: $CONTEXT"
 }
 
-list__help='@arg domain @does list domains or contexts under a provided domain.'
+list__help='@does list domains or contexts under the set domain.'
 list__ () {
- local domain=$1
- ls $__datadir/${domain}
+ ls $__datadir/${__domain}
+}
+
+domains__help='@does list all domains.'
+domains__ () {
+ ls $__datadir 
 }
 
 tree__help='@does print a tree of all contexts under their domain'
