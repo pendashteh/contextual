@@ -66,6 +66,12 @@ dirs__ () {
   cat $CONTEXT_PATH/pwd | uniq | sort | tee $CONTEXT_PATH/pwd
 }
 
+which__help='@arg dir @does list contexts in which dir exists'
+which__ () {
+  local path=$(realpath $1)
+  find $__datadir -name pwd -exec grep $path -H {} \; | sed "s|$__datadir\/\(.*\)\/pwd.*|\1|" | uniq
+}
+
 info__help='@does provide info on current context'
 info__ () {
   find $CONTEXT_PATH -type f
