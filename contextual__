@@ -41,9 +41,29 @@ set__ () {
   export _ps1_pre_context=${_ps1_pre_context:-$PS1}
   export PS1="$(basename $CONTEXT_PATH)::$_ps1_pre_context"
 
+  local command=$(get__ 'command')
+  if [[ -n $command ]]; then
+    __exec $command
+  fi
+
   # sets the title for tmux panes
   : 'https://stackoverflow.com/a/9757133/257479'
   printf '\033]2;%s\033\\' "context: $CONTEXT"
+}
+
+get__ () {
+  : 'get info about the context'
+
+  local info=${1:-'path'}
+  case $info in
+    'command')
+      touch $CONTEXT_PATH/command
+      cat $CONTEXT_PATH/command
+      ;;
+    'path')
+      echo $CONTEXT_PATH
+      ;;
+  esac
 }
 
 list__help='@does list domains or contexts under the set domain.'
