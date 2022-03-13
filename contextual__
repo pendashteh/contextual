@@ -88,7 +88,7 @@ dirs__ () {
 
 which__help='@arg dir @does list contexts in which dir exists'
 which__ () {
-  local path=$(realpath $1)
+  local path=$(realpath ${1:-$(pwd)})
   find $__datadir -name pwd -exec grep $path -H {} \; | sed "s|$__datadir\/\(.*\)\/pwd.*|\1|" | uniq
 }
 
