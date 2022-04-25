@@ -61,6 +61,11 @@ timeline__ () {
   cat $timeline__
 }
 
+recent__help='@does list recent contexts from the newsest first'
+recent__ () {
+  timeline__ | cut -d$'\t' -f2 | xargs -I {} basename {} | awk '!x[$0]++' | tac
+}
+
 get__ () {
   : 'get info about the context'
 
