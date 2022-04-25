@@ -5,6 +5,8 @@ __datadir=$HOME/.context
 __context='main'
 __domain='default'
 
+timeline__=
+
 # tmux integration
 if [[ $TMUX_PANE ]]; then {
   __context=$(tmux display-message -p '#{pane_id}')
@@ -13,6 +15,7 @@ if [[ $TMUX_PANE ]]; then {
 
 __puton__ () {
   mkdir -p $__datadir/$__domain
+  timeline__=$__datadir/timeline
 }
 
 __sourced () {
@@ -46,9 +49,16 @@ set__ () {
     __exec $command
   fi
 
+  # add to timeline
+  printf '%s\t%s\n' "$(date)" $CONTEXT_PATH >> $timeline__
+
   # sets the title for tmux panes
   : 'https://stackoverflow.com/a/9757133/257479'
   printf '\033]2;%s\033\\' "context: $CONTEXT"
+}
+
+timeline__ () {
+  cat $timeline__
 }
 
 get__ () {
