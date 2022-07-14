@@ -44,6 +44,9 @@ set__ () {
   export _ps1_pre_context=${_ps1_pre_context:-$PS1}
   export PS1="$(basename $CONTEXT_PATH)::$_ps1_pre_context"
 
+  # create notes
+  touch $CONTEXT_PATH/notes
+
   local command=$(get__ 'command')
   if [[ -n $command ]]; then
     __exec $command
@@ -59,6 +62,11 @@ set__ () {
 
 timeline__ () {
   cat $timeline__
+}
+
+notes__help='@does open notes for this context'
+notes__ () {
+  ${EDITOR:-vim} $CONTEXT_PATH/notes
 }
 
 recent__help='@does list recent contexts from the newsest first'
