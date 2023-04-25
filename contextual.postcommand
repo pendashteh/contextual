@@ -1,6 +1,22 @@
 #! /usr/bin/env bash
 
+: 'credit to ChatGPT'
+function __append_unique () {
+    local str="$1"
+    local file="$2"
+    local last_line
+
+    # Check if file exists and is readable
+    [[ ! -r "$file" ]] && return 1
+
+    # Get the last line of the file
+    last_line=$(tail -n 1 "$file")
+
+    # Compare last line to the string
+    [[ "$last_line" != "$str" ]] && echo "$str" >> "$file"
+}
+
 if [[ $CONTEXT_PATH ]]; then {
   history -a; history -c; history -r;
-  pwd >> $CONTEXT_PATH/pwd
+  __append_unique $(pwd) $CONTEXT_PATH/pwd
 } fi
