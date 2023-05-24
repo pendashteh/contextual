@@ -10,7 +10,7 @@ if [[ $TMUX_PANE ]]; then {
   local context__default=$(tmux display-message -p '#{pane_id}')
   local context_domain=$(basename $(tmux display-message -p "#{socket_path}"))
 } fi
-echo
+cd ~/.context/$context_domain
 read -e -p "context name? [default: ${context__default}] " context
 source contextual --domain $context_domain set ${context:-$context__default}
 
