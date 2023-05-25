@@ -1,20 +1,18 @@
 #!/usr/bin/env bash
 
-__datadir=$HOME/.context
+__datadir=$HOME/.contextual
 
 __context='main'
-__domain='default'
 
 timeline__=
 
 # tmux integration
 if [[ $TMUX_PANE ]]; then {
   __context=$(tmux display-message -p '#{pane_id}')
-  __domain=$(basename $(tmux display-message -p "#{socket_path}"))
 } fi
 
 __puton__ () {
-  mkdir -p $__datadir/$__domain
+  mkdir -p $__datadir/contexts
   timeline__=$__datadir/timeline
 }
 
@@ -26,15 +24,14 @@ switch__help='asks for the context and __domain and invokes set__'
 switch__ () {
   ! __sourced && echo 'please source: $ source [cmd]' && return
   read -p 'context name? [default: '$__context'] ' context
-  read -p 'domain name? [default: '$__domain'] ' domain
-  __domain=${domain:-$__domain} set__ ${context:-$__context}
+  set__ ${context:-$__context}
 }
 
 set__help='@arg context @does set history and pwd for as per the given context.'
 set__ () {
   __context=${1:-$__context}
   shopt -s histappend
-  export CONTEXT_PATH=$__datadir/$__domain/$__context
+  export CONTEXT_PATH=$__datadir/contexts/$__context
   mkdir -p $CONTEXT_PATH
   export HISTFILE=$CONTEXT_PATH/bash_history
   local paths_file=$CONTEXT_PATH/pwd
