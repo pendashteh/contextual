@@ -2,14 +2,9 @@
 
 __datadir=$HOME/.contextual
 
-__context='main'
+__context=${__context:-'main'}
 
 timeline__=
-
-# tmux integration
-if [[ $TMUX_PANE ]]; then {
-  __context=$(tmux display-message -p '#{pane_id}')
-} fi
 
 __puton__ () {
   mkdir -p $__datadir/contexts
