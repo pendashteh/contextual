@@ -49,7 +49,7 @@ set__ () {
 
   # sets the title for tmux panes
   : 'https://stackoverflow.com/a/9757133/257479'
-  printf '\033]2;%s\033\\' "context: $CONTEXT"
+  printf '\033]2;%s\033\\' "context: $__context"
 }
 
 timeline__ () {
