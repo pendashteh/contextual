@@ -5,3 +5,4 @@ if [[ $TMUX_PANE ]]; then {
   __context=$(tmux display-message -p '#W')
 } fi
 
+alias ::='source contextual'
