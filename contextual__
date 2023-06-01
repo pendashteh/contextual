@@ -15,10 +15,11 @@ __sourced () {
   [[ "${BASH_SOURCE[0]}" != "${0}" ]]
 }
 
-switch__help='asks for the context and __domain and invokes set__'
+switch__help='@does ask for the context and invokes set__'
 switch__ () {
   ! __sourced && echo 'please source: $ source [cmd]' && return
-  read -p 'context name? [default: '$__context'] ' context
+  local context=$1
+  test -z $context && read -p 'context name? [default: '$__context'] ' context
   set__ ${context:-$__context}
 }
 
