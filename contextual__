@@ -32,6 +32,7 @@ set__ () {
   mkdir -p $CONTEXT_PATH
   export HISTFILE=$CONTEXT_PATH/bash_history
   local paths_file=$CONTEXT_PATH/pwd
+  touch $paths_file
   test -f $paths_file && {
     cd $(tail -n1 $paths_file)
   }
