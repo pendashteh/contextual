@@ -4,11 +4,11 @@ __datadir=$HOME/.contextual
 
 __context=${__context:-'main'}
 
-timeline__=
+__timeline=
 
 __puton__ () {
   mkdir -p $__datadir/contexts
-  timeline__=$__datadir/timeline
+  __timeline=$__datadir/timeline
 }
 
 __sourced () {
@@ -26,31 +26,40 @@ switch__ () {
 set__help='@arg context @does set history and pwd for as per the given context.'
 set__ () {
   __context=${1:-$__context}
-  shopt -s histappend
-  export CONTEXT_PATH=$__datadir/contexts/$__context
+  
+  # Set environmental variables for current context
   export CONTEXT=$__context
+  export CONTEXT_PATH=$__datadir/contexts/$__context
   mkdir -p $CONTEXT_PATH
+  
+  # Set history
+  shopt -s histappend
   export HISTFILE=$CONTEXT_PATH/bash_history
+
+  # Caoture working directories
   local paths_file=$CONTEXT_PATH/pwd
   touch $paths_file
   test -f $paths_file && {
     cd $(tail -n1 $paths_file)
   }
 
-  # create notes
+  # Create notes
   touch $CONTEXT_PATH/notes
 
-  local command=$(get__ 'command')
+
+  # Create command
+  touch $CONTEXT_PATH/command
+  local command=$(cat $CONTEXT_PATH/command)
   if [[ -n $command ]]; then
     __exec $command
   fi
 
   # add to timeline
-  printf '%s\t%s\n' "$(date)" $CONTEXT_PATH >> $timeline__
+  printf '%s\t%s\n' "$(date)" $CONTEXT_PATH >> $__timeline
 }
 
 timeline__ () {
-  cat $timeline__
+  cat $__timeline
 }
 
 notes__help='@does open notes for this context'
@@ -61,21 +70,6 @@ notes__ () {
 recent__help='@does list recent contexts from the newsest first'
 recent__ () {
   timeline__ | cut -d$'\t' -f2 | xargs -I {} basename {} | awk '!x[$0]++' | tac
-}
-
-get__ () {
-  : 'get info about the context'
-
-  local info=${1:-'path'}
-  case $info in
-    'command')
-      touch $CONTEXT_PATH/command
-      cat $CONTEXT_PATH/command
-      ;;
-    'path')
-      echo $CONTEXT_PATH
-      ;;
-  esac
 }
 
 list__help='@does list domains or contexts under the set domain.'
