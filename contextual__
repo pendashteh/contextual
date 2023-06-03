@@ -37,15 +37,10 @@ set__ () {
   export HISTFILE=$CONTEXT_PATH/bash_history
 
   # Caoture working directories
-  local paths_file=$CONTEXT_PATH/pwd
-  touch $paths_file
-  test -f $paths_file && {
-    cd $(tail -n1 $paths_file)
-  }
+  touch $CONTEXT_PATH/pwd
 
   # Create notes
   touch $CONTEXT_PATH/notes
-
 
   # Create command
   touch $CONTEXT_PATH/command
