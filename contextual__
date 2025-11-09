@@ -11,46 +11,19 @@ __puton__ () {
   __timeline=$__datadir/timeline
 }
 
-__sourced () {
-  [[ "${BASH_SOURCE[0]}" != "${0}" ]]
+path__help='@arg (optional) context @does print path to datadir for the provided context or the current context'
+path__ () {
+  local context=${1:-$CONTEXT}
+  echo $__datadir/contexts/$context
 }
 
-switch__help='@does ask for the context and invokes set__'
-switch__ () {
-  ! __sourced && echo 'please source: $ source [cmd]' && return
-  local context=$1
-  test -z $context && read -p 'context name? [default: '$__context'] ' context
-  set__ ${context:-$__context}
-}
-
-set__help='@arg context @does set history and pwd for as per the given context.'
-set__ () {
-  __context=${1:-$__context}
-  
-  # Set environmental variables for current context
-  export CONTEXT=$__context
-  export CONTEXT_PATH=$__datadir/contexts/$__context
-  mkdir -p $CONTEXT_PATH
-  
-  # Set history
-  shopt -s histappend
-  export HISTFILE=$CONTEXT_PATH/bash_history
-
-  # Caoture working directories
-  touch $CONTEXT_PATH/pwd
-
-  # Create notes
-  touch $CONTEXT_PATH/notes
-
-  # Create command
-  touch $CONTEXT_PATH/command
-  local command=$(cat $CONTEXT_PATH/command)
-  if [[ -n $command ]]; then
-    __exec $command
-  fi
-
-  # add to timeline
-  printf '%s\t%s\n' "$(date)" $CONTEXT_PATH >> $__timeline
+install__help='@does install the app by enabling potato toppings'
+install__ () {
+  local basedir=$(dirname $__src__)
+  cd $basedir/toppings
+  for file in *; do
+    __exec potato enable $file
+  done
 }
 
 timeline__ () {
@@ -98,4 +71,4 @@ info__ () {
   find $CONTEXT_PATH -type f
 }
 
-source undies3
+source undies

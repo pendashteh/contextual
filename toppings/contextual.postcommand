@@ -16,7 +16,7 @@ function __append_unique () {
     [[ "$last_line" != "$str" ]] && echo "$str" >> "$file"
 }
 
-if [[ $CONTEXT_PATH ]]; then {
+if [[ $CONTEXT ]]; then {
   history -a; history -c; history -r;
   __append_unique $(pwd) $CONTEXT_PATH/pwd
 } fi
