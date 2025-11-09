@@ -42,7 +42,9 @@ recent__ () {
 
 list__help='@does list domains or contexts under the set domain.'
 list__ () {
- ls $__datadir/${__domain}
+ #ls $__datadir/${__domain}
+ # - [ ] @TODO domains to be incorporated
+ ls $__datadir/contexts
 }
 
 domains__help='@does list all domains.'
